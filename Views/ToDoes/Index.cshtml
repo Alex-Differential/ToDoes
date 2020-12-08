@@ -1,0 +1,84 @@
+﻿@model ToDoList.Models.ToDo
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>My ToDo-List</h2>
+<div class="container">
+    <div class="form-group">
+        <div class="input-group">
+            <span class="input-group-addon"> <i class="glyphicon glyphicon-search"></i></span>
+            <input type="text" id="taskSingleInline" placeholder="Search" class="form-control" />
+        </div>
+
+    </div>
+</div>
+<div id="tableDiv"></div>
+<div id="todoCreateForm">
+    @using (Ajax.BeginForm("AJAXCreate", "ToDoes", new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        UpdateTargetId = "tableDiv"
+    }))
+    {
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            <div>
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+</div>
+
+
+<div id="welcome-message"></div>
+@*@section scripts{
+        <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+        <script src="~/signalr/js"></script>
+        <script src="~/Scripts/SignalR.js"></script>
+    }*@
+
+@*<script >
+        document.getElementsByClassName('form-control').value = '';
+    </script>*@
+
+@section Scripts{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/New_Scripts/BuildTable.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+        <script src="~/signalr/js"></script>
+        <script src="~/Scripts/SignalR.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        function Contains(text_one, text_two) {
+            if (text_one.indexOf(text_two) != -1)
+                return true;
+        }
+        $("#taskSingleInline").keyup(function () {
+            var searchText = $("#taskSingleInline").val().toLowerCase();
+            $(".taskSingleInline").each(function () {
+                if (!Contains($(this).text().toLowerCase(), searchText)) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            });
+        });
+        //$('#form-group').get(0).reset()
+
+    });
+</script>
+
+
+
+
+
+
